@@ -5,12 +5,23 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+
+// Pages
+import { EditRecipePage } from '../pages/edit-recipe/edit-recipe';
+import { RecipesPage } from '../pages/recipes/recipes';
+import { RecipePage } from '../pages/recipe/recipe';
+import { ShoppingListPage } from '../pages/shopping-list/shopping-list';
+import { TabsPage } from '../pages/tabs/tabs';
+
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    EditRecipePage,
+    RecipesPage,
+    RecipePage,
+    ShoppingListPage,
+    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -19,7 +30,11 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    EditRecipePage,
+    RecipesPage,
+    RecipePage,
+    ShoppingListPage,
+    TabsPage
   ],
   providers: [
     StatusBar,
