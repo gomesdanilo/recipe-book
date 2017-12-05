@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NgForm } from '@angular/forms/src/directives/ng_form';
+import { ShoppingListService } from '../../services/shopping-list';
 
 
 
@@ -10,8 +11,13 @@ import { NgForm } from '@angular/forms/src/directives/ng_form';
 })
 export class ShoppingListPage {
 
+  constructor(private shoppingListService : ShoppingListService){}
+
   onAddItem(form : NgForm){
-    console.log(form);
+    this.shoppingListService.addItem(
+      form.value.ingretientName, 
+      form.value.amount);
+      form.reset();
   }
 
 }
