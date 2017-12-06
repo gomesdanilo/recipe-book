@@ -103,10 +103,19 @@ export class EditRecipePage implements OnInit {
       });
     }
 
-    this.recipesService.addRecipe(value.title, 
-      value.description, 
-      value.difficulty, 
-      ingredients);
+    if(this.mode == 'Edit'){
+      this.recipesService.updateRecipe(this.index,
+        value.title, 
+        value.description, 
+        value.difficulty, 
+        ingredients);
+    } else {
+      this.recipesService.addRecipe(value.title, 
+        value.description, 
+        value.difficulty, 
+        ingredients);
+    }
+    
     this.recipeForm.reset();
     this.navController.popToRoot();
   }
@@ -134,7 +143,7 @@ export class EditRecipePage implements OnInit {
           text : 'Remove all ingredient',
           role : 'destructive',
           handler : () => {
-            debugger;
+            
             const fArray : FormArray = <FormArray>this.recipeForm.get('ingredients');
             const len = fArray.length;
             if (len > 0){
