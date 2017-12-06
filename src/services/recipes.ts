@@ -12,6 +12,8 @@ export class RecipesService {
             description, 
             difficulty, 
             ingredients));
+
+        console.log('Added recipe', this.recipes);
     }
 
     getRecipes(){
