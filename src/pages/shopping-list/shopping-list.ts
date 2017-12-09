@@ -3,8 +3,10 @@ import {
     IonicPage, 
     NavController, 
     NavParams, 
-    PopoverController } from 'ionic-angular';
-import { NgForm } from '@angular/forms/src/directives/ng_form';
+    PopoverController,
+    LoadingController,
+    AlertController } from 'ionic-angular';
+import { NgForm } from '@angular/forms';
 import { ShoppingListService } from '../../services/shopping-list';
 import { Ingredient } from '../../models/ingredient';
 import { SLOptionsPage } from './sl-options/sl-options';
@@ -21,7 +23,9 @@ export class ShoppingListPage {
 
   constructor(private shoppingListService : ShoppingListService,
               private popoverController : PopoverController,
-              private authService : AuthService){}
+              private authService : AuthService,
+              private loadingController : LoadingController,
+              private alertController : AlertController){}
 
   ionViewWillEnter(){
     this.loadItems();
@@ -30,6 +34,16 @@ export class ShoppingListPage {
   loadItems(){
     this.listItems = this.shoppingListService.getItems();
   }
+
+  private handleError(errorMessage : string){
+    const alert = this.alertController.create({
+      title : 'An error occured',
+      message : errorMessage,
+      buttons : ['Ok']
+    });
+    alert.present();
+  }
+  
 
   onAddItem(form : NgForm){
     this.shoppingListService.addItem(
@@ -45,34 +59,51 @@ export class ShoppingListPage {
   }
 
   onShowOptions(event : MouseEvent){
+    const loading = this.loadingController.create({
+      content : 'Please wait...'
+    });
+
+
     const popover = this.popoverController.create(SLOptionsPage);
     popover.present({ ev: event });
     popover.onDidDismiss(data => {
 
-        console.log('dismissed popover', data);
         if(data.action == 'load'){
+
+          loading.present();
+
           this.authService.getActiveUser().getToken()
           .then((token : string) => {
               this.shoppingListService.fetchList(token)
                   .subscribe(
                       (list : Ingredient[]) => {
-                        console.log('Success!');
+                        loading.dismiss();
                         if (list){
                           this.listItems = list;
                         } else {
                           this.listItems = [];
                         }
                       },
-                      error => console.log("Error", error)
+                      error => {
+                        loading.dismiss();
+                        this.handleError(error.json().error);
+                      }
                   );
           })
         } else if(data.action == 'store'){
+
+            loading.present();
             this.authService.getActiveUser().getToken()
             .then((token : string) => {
                 this.shoppingListService.storeList(token)
                     .subscribe(
-                        () => console.log('Success!'),
-                        error => console.log("Error", error)
+                        () => {
+                          loading.dismiss();
+                        },
+                        error => {
+                          loading.dismiss();
+                          this.handleError(error.json().error);
+                        }
                     );
             })
         }
