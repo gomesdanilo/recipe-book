@@ -20,7 +20,6 @@ import { AuthService } from '../services/auth';
 import { SLOptionsPage } from '../pages/shopping-list/sl-options/sl-options';
 import { HttpModule } from '@angular/http';
 
-
 @NgModule({
   declarations: [
     MyApp,

@@ -1,5 +1,7 @@
 import * as firebase from 'firebase';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class AuthService {
     signup(email : string, password: string){
         return firebase.auth().createUserWithEmailAndPassword(email, password);
@@ -16,5 +18,4 @@ export class AuthService {
     getActiveUser(){
         return firebase.auth().currentUser;
     } 
-
 }

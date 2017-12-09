@@ -8,6 +8,7 @@ import { NgForm } from '@angular/forms/src/directives/ng_form';
 import { ShoppingListService } from '../../services/shopping-list';
 import { Ingredient } from '../../models/ingredient';
 import { SLOptionsPage } from './sl-options/sl-options';
+import { AuthService } from '../../services/auth';
 
 
 @Component({
@@ -19,7 +20,8 @@ export class ShoppingListPage {
   listItems : Ingredient[]; 
 
   constructor(private shoppingListService : ShoppingListService,
-              private popoverController : PopoverController){}
+              private popoverController : PopoverController,
+              private authService : AuthService){}
 
   ionViewWillEnter(){
     this.loadItems();
@@ -45,6 +47,22 @@ export class ShoppingListPage {
   onShowOptions(event : MouseEvent){
     const popover = this.popoverController.create(SLOptionsPage);
     popover.present({ ev: event });
+    popover.onDidDismiss(data => {
+
+        console.log('dismissed popover', data);
+        if(data.action == 'load'){
+
+        } else if(data.action == 'store'){
+            this.authService.getActiveUser().getToken()
+            .then((token : string) => {
+                this.shoppingListService.storeList(token)
+                    .subscribe(
+                        () => console.log('Success!'),
+                        error => console.log("Error", error)
+                    );
+            })
+        }
+    })
   }
 
 }
