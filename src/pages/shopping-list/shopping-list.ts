@@ -9,8 +9,8 @@ import {
 import { NgForm } from '@angular/forms';
 import { ShoppingListService } from '../../services/shopping-list';
 import { Ingredient } from '../../models/ingredient';
-import { SLOptionsPage } from './sl-options/sl-options';
 import { AuthService } from '../../services/auth';
+import { DatabaseOptionsPage } from '../database-options/database-options';
 
 
 @Component({
@@ -64,7 +64,7 @@ export class ShoppingListPage {
     });
 
 
-    const popover = this.popoverController.create(SLOptionsPage);
+    const popover = this.popoverController.create(DatabaseOptionsPage);
     popover.present({ ev: event });
     popover.onDidDismiss(data => {
 
