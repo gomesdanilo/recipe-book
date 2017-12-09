@@ -51,7 +51,21 @@ export class ShoppingListPage {
 
         console.log('dismissed popover', data);
         if(data.action == 'load'){
-
+          this.authService.getActiveUser().getToken()
+          .then((token : string) => {
+              this.shoppingListService.fetchList(token)
+                  .subscribe(
+                      (list : Ingredient[]) => {
+                        console.log('Success!');
+                        if (list){
+                          this.listItems = list;
+                        } else {
+                          this.listItems = [];
+                        }
+                      },
+                      error => console.log("Error", error)
+                  );
+          })
         } else if(data.action == 'store'){
             this.authService.getActiveUser().getToken()
             .then((token : string) => {

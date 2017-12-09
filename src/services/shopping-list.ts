@@ -38,4 +38,16 @@ export class ShoppingListService {
                 return response.json();
             });
     }
+
+    fetchList(token : string){
+        const uid = this.authService.getActiveUser().uid;
+        const baseUrl = 'https://ionic2-recipebook-27bcb.firebaseio.com/';
+        const url = baseUrl + "/" + uid + "/shopping-list.json?auth="+token;
+        return this.http.get(url)
+            .map((response : Response) => {
+                return response.json();
+            }).do( data => {
+                this.ingredients = data;
+            });
+    }
 }
