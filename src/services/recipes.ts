@@ -59,7 +59,14 @@ export class RecipesService {
         const url = baseUrl + "/" + uid + "/recipes-list.json?auth="+token;
         return this.http.get(url)
             .map((response : Response) => {
-                return response.json();
+
+                const recipes : Recipe[] = response.json() ? response.json() : [];
+                for(let rec of recipes){
+                    if (!rec.hasOwnProperty('ingredients')){
+                        rec.ingredients = [];
+                    }
+                }
+                return recipes;
             }).do( data => {
                 this.recipes = data;
             });
